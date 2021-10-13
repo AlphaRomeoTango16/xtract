@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { useState, useEffect } from 'react'
 
 const ResultContainer = styled.div`
     display: flex;
@@ -37,23 +38,39 @@ const ResultEmail = styled.div`
 `
 
 const ClearButton = styled.button`
-    color: white;
+    color: black;
     margin: 10px
 `
 
 function Result() {
-    
+    const [showPhone, setShowPhone] = useState(true)
+
     const fName = localStorage.getItem('firstName')
     const lName = localStorage.getItem('lastName')
+    const pNumber = localStorage.getItem('phoneNumber')
+    const eAddress = localStorage.getItem('emailAddress')
+
+    function BackToForm() {
+        localStorage.clear();
+        window.location.href="http://localhost:3000/";
+    }
+
+    useEffect(() => {
+        const phone = pNumber
+        if(phone === "") {
+            setShowPhone(false)
+        }
+    }, [pNumber])
+
 
     return (
         <ResultContainer>
             <ResultWrapper>
-                <ResultFirstName>Votre prénom est : {fName}</ResultFirstName>
-                <ResultLastName>Votre nom est : {lName}</ResultLastName>
-                {/* <ResultPhone>Votre portable est : {phoneNumber}</ResultPhone>
-                <ResultEmail>Votre email est : {emailAddress}</ResultEmail> */}
-                <ClearButton>Revenir au formulaire</ClearButton>
+                <ResultFirstName>Votre prénom est {fName}</ResultFirstName>
+                <ResultLastName>Votre nom est {lName}</ResultLastName>
+                <ResultPhone style={{ display: showPhone ? "block" : "none"}}>Votre portable est {pNumber}</ResultPhone>
+                <ResultEmail>Votre email est {eAddress}</ResultEmail>
+                <ClearButton onClick={BackToForm}>Revenir au formulaire</ClearButton>
             </ResultWrapper>
         </ResultContainer>
     )
